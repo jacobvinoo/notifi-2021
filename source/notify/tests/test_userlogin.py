@@ -26,4 +26,28 @@ class LoginTests(TestCase):
         res = self.client.post(LOGIN_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        # Add assert to check if dashboard.html is loaded
+        self.assertTemplateUsed(res, 'dashboard.html')
+
+    def test_user_with_wrong_password_does_not_login(self):
+        """Test that user with a wrong password cannot login"""
+
+        payload = {
+            'username': 'test@test.co.nz',
+            'password': 'wrongpassword'
+        }
+        res = self.client.post(LOGIN_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTemplateUsed(res, 'login.html')
+
+    def test_user_without_credentials_fail_to_login(self):
+        """Test that a user with in valid credentials does not login"""
+
+        payload = {
+            'username': 'fake@fake.com',
+            'password': 'wrongpassword'
+        }
+        res = self.client.post(LOGIN_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTemplateUsed(res, 'login.html')

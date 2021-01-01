@@ -40,9 +40,12 @@
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li>
       </ul>
-      
-      <a href="{% url 'login' %}"><button class="btn btn-outline-success">Login</button></a>
-      
+      {% if user.is_authenticated %}
+        <p class="test-right">Logged in as {{user}}</p>
+        <a href="{% url 'logout' %}"><button class="btn btn-outline-success">Logout</button></a>
+      {% else%}  
+        <a href="{% url 'login' %}"><button class="btn btn-outline-success">Login</button></a>
+      {% endif %}
     </div>
   </div>
 </nav>

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout as auth_logout
 from .forms import LoginForm
 
 # Create your views here.
@@ -23,11 +23,22 @@ def login_page(request):
         if user:
             login(request, user)
             context = {
-                "user": user
+                "incoming": [],
+                "outgoing": []
             }
             return render(request, 'dashboard.html', context)
         else:
-            print("Error")
-            # UPDATE: notification for error -wrong username or password
+            return render(request, 'login.html', context)
 
     return render(request, 'login.html', context)
+
+
+def logout(request):
+    auth_logout(request)
+    return render(request, 'home.html')
+
+
+def dashboard(request):
+    # Update: List of notifications
+    # Update: List of
+    return render(request, 'dashboard.html', {})

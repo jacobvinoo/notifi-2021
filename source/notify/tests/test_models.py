@@ -12,7 +12,7 @@ def admin_sample_user(email='admin@vinoojacob.com', password='testpass'):
     return sample_admin_user
 
 
-def sample_user(email='test@orgincompany.com', password='testpass'):
+def sample_user(email='test_e@orgincompany.com', password='testpass'):
     """Create a sample user"""
     return get_user_model().objects.create_user(email, password)
 
@@ -22,12 +22,12 @@ def sample_user_1(email='test1@orgincompany.com', password='testpass'):
     return get_user_model().objects.create_user(email, password)
 
 
-def sample_orgin_company(name='Origin Company'):
+def sample_orgin_company(company_name='Origin Company'):
     """Create a sample Origin Company"""
     sample_company = models.Company.objects.create(
-        creator=sample_user(),
-        name=name,
-        admin_person=sample_user()
+        creator=sample_user('test2@origincompany.com', 'testpass'),
+        company_name=company_name,
+        admin_person=admin_sample_user()
     )
     return sample_company
 
@@ -38,11 +38,11 @@ class ModelTests(TestCase):
         """Test that company string representation"""
         company = models.Company.objects.create(
             creator=admin_sample_user(),
-            name='Vocus',
+            company_name='Vocus',
             admin_person=sample_user(),
         )
 
-        self.assertEqual(str(company), company.name)
+        self.assertEqual(str(company), company.company_name)
 
     def test_notification_str(self):
         """Test the notification string representation"""
@@ -51,7 +51,7 @@ class ModelTests(TestCase):
             creator=sample_user(),
             orgin_company=models.Company.objects.create(
                 creator=admin_sample_user(),
-                name='Vocus',
+                company_name='Vocus',
                 admin_person=sample_user_1()),
             date_of_outage=datetime.date(2020, 12, 23),
             window_start_time=datetime.time(15, 30),
@@ -66,3 +66,13 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(notification), notification.title)
+
+    def test_employee_str(self):
+        """Test the employee can be created and string represented"""
+
+        employee = models.Employee.objects.create(
+            employee=sample_user(),
+            company=sample_orgin_company(company_name="Company1")
+        )
+
+        self.assertEqual(str(employee), 'test_e@orgincompany.com')

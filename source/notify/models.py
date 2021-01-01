@@ -6,7 +6,7 @@ from core.models import User
 
 class Company(models.Model):
     """Company for the notification"""
-    name = models.CharField(max_length=255)
+    company_name = models.CharField(max_length=255)
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE)
@@ -18,7 +18,7 @@ class Company(models.Model):
         verbose_name_plural = "Companies"
 
     def __str__(self):
-        return self.name
+        return self.company_name
 
 
 class Notification(models.Model):
@@ -39,3 +39,15 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Employee(models.Model):
+    """Employee model"""
+    employee = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
+    company = models.ForeignKey(Company,
+                                on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.employee.email
