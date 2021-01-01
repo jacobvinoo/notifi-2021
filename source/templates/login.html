@@ -1,8 +1,35 @@
-<html>
-<h2>Log In</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log In</button>
-</form>
-</html>
+{% extends "base.html"%}
+
+{% block content%}
+
+<div class="container">
+<div class="row clearfix">
+    <div class="col-md-6 col-md-offset-3 column">
+        <form role="form" method="post" action="{% url 'login'%}">
+        {% csrf_token %}
+        <table>
+          <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+          </tr>
+          <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+          </tr>
+        </table>
+        <input type="submit" value="login" />
+        
+  
+        </form>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-md-12 column">
+    </div>
+</div>
+</div>
+
+  
+ 
+
+{% endblock %}
