@@ -5,31 +5,31 @@ import datetime
 from notify import models
 
 
-def admin_sample_user(email='admin@vinoojacob.com', password='testpass'):
+def create_admin_sample_user(email='admin@vinoojacob.com',
+                             password='testpass'):
     """Create a sample admin user"""
     sample_admin_user = get_user_model().objects.create_user(email, password)
     sample_admin_user.is_staff = True
     return sample_admin_user
 
 
-def sample_user(email='test_e@orgincompany.com', password='testpass'):
+def create_sample_user(email='test_e@orgincompany.com', password='testpass'):
     """Create a sample user"""
     return get_user_model().objects.create_user(email, password)
 
 
-def sample_user_1(email='test1@orgincompany.com', password='testpass'):
-    """Create a sample user"""
-    return get_user_model().objects.create_user(email, password)
-
-
-def sample_orgin_company(company_name='Origin Company'):
+def create_sample_company(user, company_name='Origin Company'):
     """Create a sample Origin Company"""
     sample_company = models.Company.objects.create(
-        creator=sample_user('test2@origincompany.com', 'testpass'),
+        creator=user,
         company_name=company_name,
-        admin_person=admin_sample_user()
     )
     return sample_company
+
+
+def create_sample_employee(user, company):
+    """Create a sample employee"""
+    return models.Employee.objects.create(employee=user, company=company)
 
 
 class ModelTests(TestCase):
@@ -37,22 +37,20 @@ class ModelTests(TestCase):
     def test_company_str(self):
         """Test that company string representation"""
         company = models.Company.objects.create(
-            creator=admin_sample_user(),
+            creator=create_admin_sample_user(),
             company_name='Vocus',
-            admin_person=sample_user(),
         )
 
         self.assertEqual(str(company), company.company_name)
 
     def test_notification_str(self):
         """Test the notification string representation"""
-
+        sample_user1 = create_sample_user()
+        sample_company = create_sample_company(sample_user1, "Vocus")
+        sample_employee = create_sample_employee(sample_user1, sample_company)
         notification = models.Notification.objects.create(
-            creator=sample_user(),
-            orgin_company=models.Company.objects.create(
-                creator=admin_sample_user(),
-                company_name='Vocus',
-                admin_person=sample_user_1()),
+            creator=sample_employee,
+            origin_company=sample_company,
             date_of_outage=datetime.date(2020, 12, 23),
             window_start_time=datetime.time(15, 30),
             window_end_time=datetime.time(16, 30),
@@ -70,9 +68,12 @@ class ModelTests(TestCase):
     def test_employee_str(self):
         """Test the employee can be created and string represented"""
 
+        user1 = create_sample_user('user@vocus.com', 'testpass')
+        company = create_sample_company(user1, company_name="Vocus")
+
         employee = models.Employee.objects.create(
-            employee=sample_user(),
-            company=sample_orgin_company(company_name="Company1")
+            employee=user1,
+            company=company,
         )
 
-        self.assertEqual(str(employee), 'test_e@orgincompany.com')
+        self.assertEqual(str(employee), 'user@vocus.com')

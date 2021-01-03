@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout as auth_logout
 from .forms import LoginForm
-
+from .models import Notification
 # Create your views here.
 
 
@@ -22,9 +22,10 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
+            outgoing_notifications = Notification.get_list_of_notifications(user)
             context = {
                 "incoming": [],
-                "outgoing": []
+                "outgoing": outgoing_notifications
             }
             return render(request, 'dashboard.html', context)
         else:
@@ -41,4 +42,14 @@ def logout(request):
 def dashboard(request):
     # Update: List of notifications
     # Update: List of
-    return render(request, 'dashboard.html', {})
+    
+    if request.user:
+        outgoing_notifications = Notification.get_list_of_notifications(request.user)
+        context = {
+            "incoming": [],
+            "outgoing": outgoing_notifications
+        }
+        return render(request, 'dashboard.html', context)
+    else:
+        return render(request, 'login.html', context)
+    
