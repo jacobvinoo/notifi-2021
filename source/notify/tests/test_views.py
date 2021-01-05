@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 import datetime
 
-from notify.models import Company, Notification, Employee
+from notify.models import Company, Notification, Employee, Service
 
 
 LOGIN_URL = reverse('login')
@@ -15,9 +15,11 @@ def create_sample_user(email='test_e@orgincompany.com', password='testpass'):
     return get_user_model().objects.create_user(email, password)
 
 
-def create_sample_employee(user, company):
+def create_sample_employee(user, company, is_admin=False):
     """Create a sample employee"""
-    return Employee.objects.create(employee=user, company=company)
+    return Employee.objects.create(employee=user,
+                                   company=company,
+                                   is_admin=is_admin)
 
 
 def create_admin_sample_user(email='admin@vinoojacob.com',
@@ -37,20 +39,28 @@ def create_sample_company(admin_user, company_name):
     return sample_company
 
 
+def create_sample_service(service_id, company):
+    """Create a sample service"""
+    return Service.objects.create(service_id=service_id, company=company,)
+
+
 def create_sample_notification(creator, company,
-                               date_of_outage, window_start_time,
-                               window_endtime, duration, title,
-                               descripition, service_id):
+                               window_start_date, window_start_time,
+                               window_end_date, window_endtime,
+                               duration, title, descripition,
+                               destination_company, service):
     notification = Notification.objects.create(
         creator=creator,
         origin_company=company,
-        date_of_outage=date_of_outage,
+        window_start_date=window_start_date,
         window_start_time=window_start_time,
+        window_end_date=window_end_date,
         window_end_time=window_endtime,
         duration=duration,
+        destination_company=destination_company,
         title=title,
         description=descripition,
-        service_id=service_id,
+        service=service,
         created_date=datetime.date.today()
     )
     return notification
@@ -123,11 +133,15 @@ class ViewQueryTests(TestCase):
         company2 = create_sample_company(admin_user1, 'Spark')
         create_sample_employee(user2, company2)
         admin_employee2 = create_sample_employee(admin_user2, company2)
+        sample_service = create_sample_service("A35343", company2)
+        sample_service2 = create_sample_service("G334343", company2)
+        sample_service3 = create_sample_service("NTERS34", company1)
 
         create_sample_notification(admin_employee1,
                                    company1,
                                    datetime.date(2020, 12, 23),
                                    datetime.time(16, 30),
+                                   datetime.date(2020, 12, 23),
                                    datetime.time(17, 30),
                                    30,
                                    "Fibre relocation",
@@ -136,31 +150,36 @@ class ViewQueryTests(TestCase):
                                     This is likely to take 15 minutes of\
                                     switch time but in case of issues,\
                                     it will be rolled back",
-                                   'A15434'
+                                   company2,
+                                   sample_service
                                    )
         create_sample_notification(admin_employee1,
                                    company1,
                                    datetime.date(2021, 11, 23),
                                    datetime.time(15, 30),
+                                   datetime.date(2020, 12, 23),
                                    datetime.time(18, 30),
                                    60,
                                    "Fibre service",
                                    "Fibre relocation from pit 40050 to pit \
                                     40285 but in case of issues, it will be \
                                     rolled back",
-                                   'A67354'
+                                   company2,
+                                   sample_service2
                                    )
         create_sample_notification(admin_employee2,
                                    company2,
                                    datetime.date(2021, 12, 3),
                                    datetime.time(23, 30),
+                                   datetime.date(2020, 12, 4),
                                    datetime.time(1, 20),
                                    60,
                                    "Router upgrade",
                                    "Upgrade of router software with the\
                                     latest update. In case of issues, it\
                                     will be rolled back",
-                                   'B6454564'
+                                   company1,
+                                   sample_service3
                                    )
 
         list_of_notifications_1 = Notification.get_list_of_notifications(

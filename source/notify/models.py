@@ -33,6 +33,19 @@ class Employee(models.Model):
         return self.employee.email
 
 
+class Service(models.Model):
+    """Services associated with each notification"""
+
+    service_id = models.CharField(max_length=50)
+    company = models.ForeignKey(Company,
+                                blank=True,
+                                null=True,
+                                on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.service_id
+
+
 class Notification(models.Model):
     """Notification model """
     creator = models.ForeignKey(Employee,
@@ -43,14 +56,23 @@ class Notification(models.Model):
                                        blank=True,
                                        null=True,
                                        on_delete=models.SET_NULL)
-    date_of_outage = models.DateField()
+    window_start_date = models.DateField()
     window_start_time = models.TimeField()
+    window_end_date = models.DateField()
     window_end_time = models.TimeField()
     duration = models.IntegerField()
     title = models.TextField()
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
-    service_id = models.CharField(max_length=50)
+    destination_company = models.ForeignKey(Company,
+                                            blank=True,
+                                            null=True,
+                                            on_delete=models.SET_NULL,
+                                            related_name="destination")
+    service = models.ForeignKey(Service,
+                                blank=True,
+                                null=True,
+                                on_delete=models.SET_NULL)
 
     def get_list_of_notifications(user):
         employee = Employee.objects.get(employee=user)

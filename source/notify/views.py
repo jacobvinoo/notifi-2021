@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout as auth_logout
+from django.core.exceptions import ObjectDoesNotExist
 from .forms import LoginForm
 from .models import Notification
 # Create your views here.
@@ -22,11 +23,18 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            outgoing_notifications = Notification.get_list_of_notifications(user)
-            context = {
-                "incoming": [],
-                "outgoing": outgoing_notifications
-            }
+            try:
+                outgoing_notifications = Notification\
+                    .get_list_of_notifications(user)
+                context = {
+                    "incoming": [],
+                    "outgoing": outgoing_notifications
+                }
+            except ObjectDoesNotExist:
+                context = {
+                    "incoming": [],
+                    "outgoing": []
+                }
             return render(request, 'dashboard.html', context)
         else:
             return render(request, 'login.html', context)
@@ -42,9 +50,10 @@ def logout(request):
 def dashboard(request):
     # Update: List of notifications
     # Update: List of
-    
+
     if request.user:
-        outgoing_notifications = Notification.get_list_of_notifications(request.user)
+        outgoing_notifications = Notification.get_list_of_notifications(
+            request.user)
         context = {
             "incoming": [],
             "outgoing": outgoing_notifications
@@ -52,4 +61,3 @@ def dashboard(request):
         return render(request, 'dashboard.html', context)
     else:
         return render(request, 'login.html', context)
-    

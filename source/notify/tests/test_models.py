@@ -27,9 +27,17 @@ def create_sample_company(user, company_name='Origin Company'):
     return sample_company
 
 
-def create_sample_employee(user, company):
+def create_sample_employee(user, company, is_admin=False):
     """Create a sample employee"""
-    return models.Employee.objects.create(employee=user, company=company)
+    return models.Employee.objects.create(employee=user,
+                                          company=company,
+                                          is_admin=is_admin)
+
+
+def create_sample_service(service_id, company):
+    """Create a sample service"""
+    return models.Service.objects.create(service_id=service_id,
+                                         company=company,)
 
 
 class ModelTests(TestCase):
@@ -47,19 +55,23 @@ class ModelTests(TestCase):
         """Test the notification string representation"""
         sample_user1 = create_sample_user()
         sample_company = create_sample_company(sample_user1, "Vocus")
+        sample_company2 = create_sample_company(sample_user1, "Spark")
         sample_employee = create_sample_employee(sample_user1, sample_company)
+        sample_service = create_sample_service("A35343", sample_company2)
         notification = models.Notification.objects.create(
             creator=sample_employee,
             origin_company=sample_company,
-            date_of_outage=datetime.date(2020, 12, 23),
+            window_start_date=datetime.date(2020, 12, 23),
             window_start_time=datetime.time(15, 30),
+            window_end_date=datetime.date(2020, 12, 23),
             window_end_time=datetime.time(16, 30),
             duration=30,
+            destination_company=sample_company2,
             title="Fibre relocation from pit 40050 to pit 40285",
             description="Moving fibre from pit 40050 to pit 40285.\
                             This is likely to take 15 minutes of switch time\
                             but in case of issues, it will be rolled back",
-            service_id='A15434',
+            service=sample_service,
             created_date=datetime.date.today()
         )
 
@@ -74,6 +86,7 @@ class ModelTests(TestCase):
         employee = models.Employee.objects.create(
             employee=user1,
             company=company,
+            is_admin=False
         )
 
         self.assertEqual(str(employee), 'user@vocus.com')
