@@ -79,5 +79,10 @@ class Notification(models.Model):
         company = Company.objects.get(company_name=employee.company)
         return Notification.objects.filter(origin_company=company)
 
+    def get_incoming_notifications(user):
+        employee = Employee.objects.get(employee=user)
+        company = Company.objects.get(company_name=employee.company)
+        return Notification.objects.filter(destination_company=company)
+
     def __str__(self):
         return self.title

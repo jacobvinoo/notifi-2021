@@ -116,21 +116,17 @@ class LoginTests(TestCase):
 class ViewQueryTests(TestCase):
     """Test the queries for dashboard views"""
 
-    def test_outgoing_notification_query(self):
-        """Test that all notifications are correctly returned"""
-        # Update date for endtime, list of service ids
+    def setUp(self):
         admin_user1 = create_admin_sample_user(
             email='admin@vocus.com', password='testpass')
-
-        # Update: Create employees not users
         user1 = create_sample_user('user@vocus.com', 'testpass')
-        company1 = create_sample_company(user1, 'Vocus')
+        company1 = create_sample_company(admin_user1, 'Vocus')
         create_sample_employee(user1, company1)
         admin_employee1 = create_sample_employee(admin_user1, company1)
 
         admin_user2 = create_admin_sample_user('admin@spark.com', 'testpass')
         user2 = create_sample_user('user@spark.com', 'testpass')
-        company2 = create_sample_company(admin_user1, 'Spark')
+        company2 = create_sample_company(admin_user2, 'Spark')
         create_sample_employee(user2, company2)
         admin_employee2 = create_sample_employee(admin_user2, company2)
         sample_service = create_sample_service("A35343", company2)
@@ -182,10 +178,24 @@ class ViewQueryTests(TestCase):
                                    sample_service3
                                    )
 
-        list_of_notifications_1 = Notification.get_list_of_notifications(
-            user1)
-        list_of_notifications_2 = Notification.get_list_of_notifications(
-            user2)
+    def test_outgoing_notification_query(self):
+        """Test that all notifications are correctly returned"""
 
-        self.assertEqual(list_of_notifications_1.count(), 2)
-        self.assertEqual(list_of_notifications_2.count(), 1)
+        user1 = get_user_model().objects.get(email='user@vocus.com')
+        user2 = get_user_model().objects.get(email='user@spark.com')
+        list_notifications_1 = Notification.get_list_of_notifications(user1)
+        list_notifications_2 = Notification.get_list_of_notifications(user2)
+
+        self.assertEqual(list_notifications_1.count(), 2)
+        self.assertEqual(list_notifications_2.count(), 1)
+
+    def test_incoming_notification_query(self):
+        """Test that all incoming notifications are queried"""
+
+        user1 = get_user_model().objects.get(email='user@vocus.com')
+        user2 = get_user_model().objects.get(email='user@spark.com')
+        list_notifications_1 = Notification.get_incoming_notifications(user1)
+        list_notifications_2 = Notification.get_incoming_notifications(user2)
+
+        self.assertEqual(list_notifications_1.count(), 1)
+        self.assertEqual(list_notifications_2.count(), 2)
