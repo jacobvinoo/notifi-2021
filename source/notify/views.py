@@ -24,10 +24,12 @@ def login_page(request):
         if user:
             login(request, user)
             try:
+                incoming_notifications = Notification\
+                    .get_incoming_notifications(user)
                 outgoing_notifications = Notification\
                     .get_list_of_notifications(user)
                 context = {
-                    "incoming": [],
+                    "incoming": incoming_notifications,
                     "outgoing": outgoing_notifications
                 }
             except ObjectDoesNotExist:

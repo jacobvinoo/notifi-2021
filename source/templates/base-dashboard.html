@@ -31,7 +31,7 @@
       </ul>
       {% if user.is_authenticated %}
         
-        <p class="test-right"><p class="fs-6"><small>Logged in as {{user}}</small></p></p> 
+        <p class="test-right"><p class="fs-6"><small>{{user}} </small> </p></p> 
         <a href="{% url 'logout' %}"><button class="btn btn-outline-success">Logout</button></a>
       {% else%}  
         <a href="{% url 'login' %}"><button class="btn btn-outline-success">Login</button></a>
