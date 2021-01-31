@@ -47,7 +47,7 @@ def create_sample_service(service_id, company):
 def create_sample_notification(creator, company,
                                window_start_date, window_start_time,
                                window_end_date, window_endtime,
-                               duration, title, descripition,
+                               duration, title, description,
                                destination_company, service):
     notification = Notification.objects.create(
         creator=creator,
@@ -59,10 +59,10 @@ def create_sample_notification(creator, company,
         duration=duration,
         destination_company=destination_company,
         title=title,
-        description=descripition,
-        service=service,
+        description=description,
         created_date=datetime.date.today()
     )
+    notification.service.add(service)
     return notification
 
 
@@ -142,13 +142,13 @@ class ViewQueryTests(TestCase):
                                    30,
                                    "Fibre relocation",
                                    "Fibre relocation from pit 40050 to pit\
-                                    40285. Moving fibre from pit 40050 to pit\
-                                    This is likely to take 15 minutes of\
-                                    switch time but in case of issues,\
-                                    it will be rolled back",
-                                   company2,
-                                   sample_service
+                                40285. Moving fibre from pit 40050 to pit\
+                                This is likely to take 15 minutes of\
+                                switch time but in case of issues,\
+                                it will be rolled back",
+                                   company2, sample_service
                                    )
+
         create_sample_notification(admin_employee1,
                                    company1,
                                    datetime.date(2021, 11, 23),
@@ -158,11 +158,12 @@ class ViewQueryTests(TestCase):
                                    60,
                                    "Fibre service",
                                    "Fibre relocation from pit 40050 to pit \
-                                    40285 but in case of issues, it will be \
-                                    rolled back",
+                                40285 but in case of issues, it will be \
+                                rolled back",
                                    company2,
                                    sample_service2
                                    )
+
         create_sample_notification(admin_employee2,
                                    company2,
                                    datetime.date(2021, 12, 3),
@@ -172,8 +173,8 @@ class ViewQueryTests(TestCase):
                                    60,
                                    "Router upgrade",
                                    "Upgrade of router software with the\
-                                    latest update. In case of issues, it\
-                                    will be rolled back",
+                                latest update. In case of issues, it\
+                                will be rolled back",
                                    company1,
                                    sample_service3
                                    )
@@ -183,9 +184,8 @@ class ViewQueryTests(TestCase):
 
         user1 = get_user_model().objects.get(email='user@vocus.com')
         user2 = get_user_model().objects.get(email='user@spark.com')
-        list_notifications_1 = Notification.get_list_of_notifications(user1)
-        list_notifications_2 = Notification.get_list_of_notifications(user2)
-
+        list_notifications_1 = Notification.get_outgoing_notifications(user1)
+        list_notifications_2 = Notification.get_outgoing_notifications(user2)
         self.assertEqual(list_notifications_1.count(), 2)
         self.assertEqual(list_notifications_2.count(), 1)
 
@@ -196,6 +196,5 @@ class ViewQueryTests(TestCase):
         user2 = get_user_model().objects.get(email='user@spark.com')
         list_notifications_1 = Notification.get_incoming_notifications(user1)
         list_notifications_2 = Notification.get_incoming_notifications(user2)
-
         self.assertEqual(list_notifications_1.count(), 1)
         self.assertEqual(list_notifications_2.count(), 2)
