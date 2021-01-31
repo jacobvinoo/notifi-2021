@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext as _
 
 from core.models import User
-from notify.models import Company, Employee, Notification, Service, Work
+from notify.models import Company, Employee, Notification, Service
 # Register your models here.
 
 
@@ -32,4 +32,3 @@ admin.site.register(Company)
 admin.site.register(Employee)
 admin.site.register(Notification)
 admin.site.register(Service)
-admin.site.register(Work)

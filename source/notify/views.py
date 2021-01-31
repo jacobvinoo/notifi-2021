@@ -27,7 +27,7 @@ def login_page(request):
                 incoming_notifications = Notification\
                     .get_incoming_notifications(user)
                 outgoing_notifications = Notification\
-                    .get_outgoing_notifications(user)
+                    .get_list_of_notifications(user)
                 context = {
                     "incoming": incoming_notifications,
                     "outgoing": outgoing_notifications
@@ -54,12 +54,10 @@ def dashboard(request):
     # Update: List of
 
     if request.user:
-        outgoing_notifications = Notification.get_outgoing_notifications(
-            request.user)
-        incoming_notifications = Notification.get_incoming_notifications(
+        outgoing_notifications = Notification.get_list_of_notifications(
             request.user)
         context = {
-            "incoming": incoming_notifications,
+            "incoming": [],
             "outgoing": outgoing_notifications
         }
         return render(request, 'dashboard.html', context)

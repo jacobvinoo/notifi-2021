@@ -1,6 +1,6 @@
 
 {% extends "base-dashboard.html" %}
-{% load static %}
+
 {% block content %}
 <div class="container">
 
@@ -18,25 +18,11 @@
 
 <div class="tab-content" id="pills-tabContent">
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-  {%if incoming%}
-  
-  <div class="icon-bar">
-      <i class="bi bi-plus-square" style="font-size: 2rem; color: cornflowerblue;"></i>
-      <i class="bi bi-x-square" style="font-size: 2rem; color: cornflowerblue;"></i>
-      <i class="bi bi-pencil-square" style="font-size: 2rem; color: cornflowerblue;"></i>
-  </div>
-
-  <table class="table table-hover">
+  {%if outgoing%}
+    <table class="table table-hover">
     <thead>
         <tr>
-        <th scope="col">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="selectAll">
-                </label>
-            </div>
-        </th>    
         <th scope="col">#</th>
-        <th scope="col">Company</th>
         <th scope="col">Date</th>
         <th scope="col">Start Time</th>
         <th scope="col">Title</th>
@@ -47,13 +33,7 @@
     <tbody>
     {%for notification in incoming%}
         <tr>
-        <th scope="row">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="select{{forloop.counter}}">
-            </div>
-        </th>
-        <td>{{ forloop.counter }}</td>
-        <td>{{notification.origin_company}}</td>
+        <th scope="row">1</th>
         <td>{{notification.window_start_date}}</td>
         <td>{{notification.window_start_time}}</td>
         <td>{{notification.title}}</td>
@@ -67,16 +47,10 @@
     {%endif%}
   </div>
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
- {%if outgoing %}
+ {%if incoming %}
     <table class="table table-hover">
     <thead>
         <tr>
-        <th scope="col">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="selectAll">
-                </label>
-            </div>
-        </th>
         <th scope="col">#</th>
         <th scope="col">Date</th>
         <th scope="col">Start Time</th>
@@ -88,12 +62,7 @@
     <tbody>
     {%for notification in outgoing%}
         <tr>
-        <th scope="row">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="select{{forloop.counter}}">
-            </div>
-        </th>
-        <th scope="row">{{ forloop.counter }}</th>
+        <th scope="row">1</th>
         <td>{{notification.window_start_date}}</td>
         <td>{{notification.window_start_time}}</td>
         <td>{{notification.title}}</td>

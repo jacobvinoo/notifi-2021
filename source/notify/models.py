@@ -69,9 +69,12 @@ class Notification(models.Model):
                                             null=True,
                                             on_delete=models.SET_NULL,
                                             related_name="destination")
-    service = models.ManyToManyField(Service)
+    service = models.ForeignKey(Service,
+                                blank=True,
+                                null=True,
+                                on_delete=models.SET_NULL)
 
-    def get_outgoing_notifications(user):
+    def get_list_of_notifications(user):
         employee = Employee.objects.get(employee=user)
         company = Company.objects.get(company_name=employee.company)
         return Notification.objects.filter(origin_company=company)
@@ -80,16 +83,6 @@ class Notification(models.Model):
         employee = Employee.objects.get(employee=user)
         company = Company.objects.get(company_name=employee.company)
         return Notification.objects.filter(destination_company=company)
-
-    def __str__(self):
-        return self.title
-
-
-class Work(models.Model):
-    """Work model that holds all notifications to different companies"""
-
-    title = models.CharField(max_length=255)
-    notification = models.ManyToManyField(Notification)
 
     def __str__(self):
         return self.title
