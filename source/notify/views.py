@@ -49,7 +49,7 @@ def logout(request):
     return render(request, 'home.html')
 
 
-def dashboard(request):
+def notifications(request):
     # Update: List of notifications
     # Update: List of
 
@@ -62,6 +62,15 @@ def dashboard(request):
             "incoming": incoming_notifications,
             "outgoing": outgoing_notifications
         }
-        return render(request, 'dashboard.html', context)
+        return render(request, 'notifications.html', context)
     else:
         return render(request, 'login.html', context)
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
+def works(request):
+    return render(request, 'works.html')
+
+def settings(request):
+    return render(request, 'settings.html')

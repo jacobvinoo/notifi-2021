@@ -77,10 +77,10 @@
       </div>
     </nav>
     <div class="sidenav">
-      <a href="#dashboard">Dashboard</a>
-      <a href="#works">Works</a>
-      <a href="#notifications">Notifications</a>
-      <a href="#settings">Settings</a>
+      <a href="{% url 'dashboard'%}">Dashboard</a>
+      <a href="{% url 'works'%}">Works</a>
+      <a href="{% url 'notifications'%}">Notifications</a>
+      <a href="{% url 'settings'%}">Settings</a>
     </div>
     <div class="main-content">
     {% block content%} {% endblock %}
