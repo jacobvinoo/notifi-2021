@@ -66,11 +66,14 @@ def notifications(request):
     else:
         return render(request, 'login.html', context)
 
+
 def dashboard(request):
     return render(request, 'dashboard.html')
 
+
 def works(request):
     return render(request, 'works.html')
+
 
 def settings(request):
     return render(request, 'settings.html')
