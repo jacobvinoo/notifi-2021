@@ -11,5 +11,5 @@ script:
     - docker-compose run notifi sh -c "python manage.py test && flake8"
 
 after_success:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password--stdin
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     - docker push jacobvinoo/notifi:latest
