@@ -14,3 +14,15 @@ after_success:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     - docker tag notifi-2021_notifi jacobvinoo/notifi-2021_notifi
     - docker push jacobvinoo/notifi-2021_notifi:latest
+
+deploy:
+    provider: elasticbeanstalk
+    region: us-east-1
+    app: notifi
+    env: Notifi-env-1
+    bucket_name: elasticbeanstalk-us-east-1-744042447806
+    bucket_path: notifi
+    on: 
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
