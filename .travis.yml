@@ -12,4 +12,5 @@ script:
 
 after_success:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker tag notifi-2021_notifi jacobvinoo/notifi-2021_notifi
     - docker push jacobvinoo/notifi-2021_notifi:latest
