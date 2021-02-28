@@ -24,6 +24,6 @@ deploy:
     bucket_path: notifi
     on: 
         repo: jacobvinoo/notifi-2021
-        branch: master
+        branch: main
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
