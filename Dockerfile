@@ -18,3 +18,4 @@ COPY ./source /source
 RUN adduser -D user
 USER user
 
+EXPOSE 80
