@@ -1,0 +1,72 @@
+{
+    "AWSEBDockerrunVersion" : 2,
+    "volumes": [
+        {
+          "name": "notifi",
+          "host": {
+            "sourcePath": "/var/app/current/notifi"
+          }
+        },
+        {
+          "name": "db",
+          "host": {
+            "sourcePath": "/var/app/current/db"
+          }
+        }  
+      ],
+    "containerDefinitions": [
+        {
+            "name": "notifi",
+            "links": [
+                "db"
+            ],
+            "image": "jacobvinoo/notifi-2021_notifi",
+            "essential": false,
+            "portMappings": [
+                {
+                    "containerPort": 8000,
+                    "hostPort": 80
+                }
+            ],
+            "environment": [
+                {
+                    "name": "DB_HOST",
+                    "value": "db"
+                },
+                {
+                    "name": "DB_NAME",
+                    "value": "notifi"
+                },
+                {
+                    "name": "DB_USER",
+                    "value": "postgres"
+                },
+                {
+                    "name": "DB_PASS",
+                    "value": "supersecretpassword"
+                }
+            ],
+            "memory": 500
+        },
+        {
+            "name": "db",
+            "image": "postgres:10-alpine",
+            "memory": 500,
+            "essential": true,
+            "environment": [
+                {
+                    "name": "POSTGRES_DB",
+                    "value": "notifi"
+                },
+                {
+                    "name": "POSTGRES_USER",
+                    "value": "postgres"
+                },
+                {
+                    "name": "POSTGRES_PASSWORD",
+                    "value": "supersecretpassword"
+                }
+            ]
+        }
+    ]
+}
