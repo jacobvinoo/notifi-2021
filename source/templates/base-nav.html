@@ -44,10 +44,20 @@
       </div>
     </nav>
     <div class="sidenav">
-      <a href="{% url 'dashboard'%}">Dashboard</a>
-      <a href="{% url 'works'%}">Works</a>
-      <a href="{% url 'notifications'%}">Notifications</a>
-      <a href="{% url 'settings'%}">Settings</a>
+      <a href="{% url 'dashboard'%}">
+        <img src="{% static '/icons/svg/speedometer.svg' %}" width = 60>
+        Dashboard
+      </a>
+      <a href="{% url 'works'%}">
+        <img src="{% static '/icons/svg/construction-traffic-cone.svg' %}" width = 60>
+        Works</a>
+      <a href="{% url 'notifications'%}">
+      <a href="{% url 'works'%}">
+        <img src="{% static '/icons/svg/date-reminder.svg' %}" width = 60>Notifications</a>
+      <a href="{% url 'settings'%}">
+      <a href="{% url 'works'%}">
+        <img src="{% static '/icons/svg/setting.svg' %}" width = 60>
+      Settings</a>
     </div>
     <div class="main-content">
     {% block content%} {% endblock %}
