@@ -1,6 +1,6 @@
 .sidenav {
     height: 100%;
-    width: 125px;
+    width: 120px;
     position: fixed;
     z-index: 1;
     top: 50;
@@ -8,6 +8,7 @@
     background-color: #f7f8f9;
     overflow-x: hidden;
     padding-top: 20px;
+    text-align: center;
   }
 
   .sidenav a {
@@ -16,10 +17,30 @@
     font-size: 14px;
     color: #737474;
     display: block;
+    align-items: center;
   }
 
   .sidenav a:hover {
     color: #181818;
+  }
+
+  .sidenav img {
+      width: 30px;
+      position:relative;
+  }  
+  
+  .sidenav svg {
+    fill: blue;
+  }
+  
+  .sidenav ul {
+      list-style-type: none;
+      padding-inline-start: 0px;
+    }
+  
+  .sidenav h5 {
+    font-weight: 600;
+    font-size: 0.6875rem;
   }
 
 .main-content {

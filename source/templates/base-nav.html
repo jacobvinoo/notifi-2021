@@ -44,20 +44,28 @@
       </div>
     </nav>
     <div class="sidenav">
-      <a href="{% url 'dashboard'%}">
-        <img src="{% static '/icons/svg/speedometer.svg' %}" width = 60>
-        Dashboard
-      </a>
-      <a href="{% url 'works'%}">
-        <img src="{% static '/icons/svg/construction-traffic-cone.svg' %}" width = 60>
-        Works</a>
-      <a href="{% url 'notifications'%}">
-      <a href="{% url 'works'%}">
-        <img src="{% static '/icons/svg/date-reminder.svg' %}" width = 60>Notifications</a>
-      <a href="{% url 'settings'%}">
-      <a href="{% url 'works'%}">
-        <img src="{% static '/icons/svg/setting.svg' %}" width = 60>
-      Settings</a>
+      <ul>
+        
+        <a href="{% url 'dashboard'%}">
+        <li>
+        <img src="{% static '/icons/svg/speedometer.svg' %}"> </li>
+        <li><h5> Dashboard </li> </h5> </a> 
+       
+        <a href="{% url 'works'%}">
+        <li>
+        <img src="{% static '/icons/svg/construction-traffic-cone.svg' %}"> </li>
+        <li><h5> Works </h5> </li> </a>
+       
+        <a href="{% url 'notifications'%}">
+        <li>
+        <img src="{% static '/icons/svg/date-reminder.svg' %}"> </li>
+        <li><h5> Notifications </h5> </li> </a>
+            
+        <a href="{% url 'settings'%}">
+        <li>
+        <img src="{% static '/icons/svg/setting.svg' %}"> </li>
+        <li><h5> Settings </h5> <li> </a>
+      </ul>  
     </div>
     <div class="main-content">
     {% block content%} {% endblock %}
